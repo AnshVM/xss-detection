@@ -1,7 +1,8 @@
+import re
+
 end = red = yellow = ''
 
 def dom(response):
-    print(response)
     highlighted = []
     sources = r'''\b(?:document\.(URL|documentURI|URLUnencoded|baseURI|cookie|referrer)|location\.(href|search|hash|pathname)|window\.name|history\.(pushState|replaceState)(local|session)Storage)\b'''
     sinks = r'''\b(?:eval|evaluate|execCommand|assign|navigate|getResponseHeaderopen|showModalDialog|Function|set(Timeout|Interval|Immediate)|execScript|crypto.generateCRMFRequest|ScriptElement\.(src|text|textContent|innerText)|.*?\.onEventName|document\.(write|writeln)|.*?\.innerHTML|Range\.createContextualFragment|(document|window)\.location)\b'''
@@ -14,15 +15,22 @@ def dom(response):
         try:
             for newLine in script:
                 line = newLine
+                print("--")
+                print(line)
                 parts = line.split('var ')
                 controlledVariables = set()
                 if len(parts) > 1:
                     for part in parts:
+                        print(part)
                         for controlledVariable in allControlledVariables:
                             if controlledVariable in part:
                                 controlledVariables.add(re.search(r'[a-zA-Z$_][a-zA-Z0-9$_]+', part).group().replace('$', '\$'))
                 pattern = re.finditer(sources, newLine)
+                print('newline')
+                print(newLine)
                 for grp in pattern:
+                    print('grp')
+                    print(grp)
                     if grp:
                         source = newLine[grp.start():grp.end()].replace(' ', '')
                         if source:
@@ -54,3 +62,5 @@ def dom(response):
         return highlighted
     else:
         return []
+    
+
