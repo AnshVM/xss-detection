@@ -324,7 +324,24 @@ var query = (new URLSearchParams(window.location.search)).get('search');
 if (query) {
     trackSearch(query);
 }
-
 """
-ast = parse(sample3)
+sample4 = """
+
+var stores = ["London", "Paris", "Milan"];
+var store = (new URLSearchParams(location.search)).get('storeId');
+document.write('<select name="storeId">');
+if (store) {
+    document.write('<option selected>' + store + '</option>');
+}
+for (var i = 0; i < stores.length; i++) {
+    if (stores[i] === store) {
+        continue;
+    }
+    document.write('<option>' + stores[i] + '</option>');
+}
+document.write('</select>');
+"""
+
+
+ast = parse(sample4)
 walk(ast)
