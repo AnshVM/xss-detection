@@ -4,7 +4,8 @@ function search() {
 }
 document.getElementById('searchbtn').addEventListener('click', search)
 
-const query = (new URLSearchParams(window.location.search)).get('q');
+const query = (new URLSearchParams(location.search)).get('q');
 if (query) {
     document.getElementById("reflect").innerHTML = `Search results for ${query}`
 }
+
